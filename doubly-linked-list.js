@@ -115,7 +115,7 @@ class DoublyLinkedList{
             let str = "";
 
             while(curr !== null){
-                str += curr.value + " ";
+                str += curr.value + (curr.next ? " => " : " ");
                 curr = curr.next;
             }
 

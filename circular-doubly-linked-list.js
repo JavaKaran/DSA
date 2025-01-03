@@ -1,26 +1,26 @@
 class Node{
     constructor(data){
         this.value = data;
+        this.prev = null;
         this.next= null;
     }
 }
 
-class CircularLinkedList{
+class CircularDoublyLinkedList{    
     constructor(){
         this.head = null;
+        this.tail = null;
         this.size = 0;
     }
 
     getElementAt(index){
-        if(index < 0 || index >= this.size){
+        if(index < 0 || index > this.size){
             return console.log("Invalid index");
         }
 
         let curr = this.head;
-        let item = 0;
 
-        while(item < index){
-            item++;
+        for(let i = 0; i < index && curr != null; i++){
             curr = curr.next;
         }
 
@@ -30,15 +30,17 @@ class CircularLinkedList{
     add(data){
         let node = new Node(data);
 
-        if(this.head === null){
+        if(!this.head){
             this.head = node;
+            this.tail = node;
         } else {
-            let curr = this.getElementAt(this.size - 1);
-
-            curr.next = node;
+            node.prev = this.tail;
+            this.tail.next = node;
+            this.tail = node;
         }
 
-        node.next = this.head;
+        this.head.prev = this.tail;
+        this.tail.next = this.head;
         this.size++;
 
         this.printList();
@@ -49,26 +51,37 @@ class CircularLinkedList{
             return console.log("Invalid index");
         }
 
-        let node = new Node(data);
-
-        let curr = this.head;
+        let node = new Node(data), curr = this.head, prev, item = 0;
 
         if(index === 0){
-            if(this.head === null){
+            if(!this.head){
                 this.head = node;
-                node.next = this.head;
+                this.tail = node;
             } else {
-                node.next = curr;
-                curr = this.getElementAt(this.size - 1);
+                node.next = this.head;
+                this.head.prev = node;
                 this.head = node;
-                curr.next = this.head;
-            }
+            } 
+        } else if(index === this.size){
+            curr = this.tail;
+            curr.next = node;
+            node.prev = curr;
+            this.tail = node;
         } else {
-            const prev = this.getElementAt(index - 1);
-            node.next = prev.next;
+            while(item++ < index){
+                prev = curr;
+                curr = curr.next;
+            }
+
+            node.next = curr;
+            node.prev = prev;
+
             prev.next = node;
+            curr.prev = node;
         }
 
+        this.head.prev = this.tail;
+        this.tail.next = this.head;
         this.size++;
 
         this.printList();
@@ -84,6 +97,7 @@ class CircularLinkedList{
         if(index === 0){
             if(this.size === 1){
                 this.head = null;
+                this.tail = null;
             } else {
                 curr = this.getElementAt(this.size - 1);
                 this.head = this.head.next;
@@ -95,50 +109,35 @@ class CircularLinkedList{
             prev.next = curr.next;
         }
 
+        if(this.head){
+            this.head.prev = this.tail;
+            this.tail.next = this.head;
+        }
+
         this.size--;
 
         this.printList();
     }
 
-    getIndexOf(data){
-        let curr = this.head;
-        let index = 0;
-
-        do {
-            if(curr.value === data){
-                return index;
-            }
-
-            curr = curr.next;
-            index++;
-        } while(curr !== this.head && index < this.size);
-
-        return -1;        
-    }
-
     printList(){
-        if(this.head === null){
-            return console.log("List is empty.");
-        }
-
         let curr = this.head;
         let str = "";
-        let count = 0;
 
         do {
-            str += curr.value + (curr.next && curr.next !== this.head ? " => " : " ");
+            str += curr.value + (curr.next && curr !== this.tail ? " => " : " ");
             curr = curr.next;
-            count++;
-        } while(curr !== this.head);
+        } while(curr != this.head);
 
-        console.log("List:", str);
+        console.log("List: ", str);
     }
-
 }
 
-let list = new CircularLinkedList();
+let list = new CircularDoublyLinkedList();
 
-list.add(67);
-list.add(45);
-list.add(102);
-list.add(150);
+list.add(69);
+list.add(128);
+list.add(340);
+list.add(389);
+
+list.addAt(218, 2);
+list.removeAt(1);

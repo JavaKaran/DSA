@@ -145,7 +145,7 @@ class LinkedList {
         let count = 0;
 
         while(curr){
-            str += curr.value + " ";
+            str += curr.value + (curr.next ? " => " : " ");
             curr = curr.next;
             count++;
         }
