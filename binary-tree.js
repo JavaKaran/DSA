@@ -119,6 +119,53 @@ class BinaryTree {
             return node;
         }
     }
+
+    preInPostTraversal(root){
+        let preorder = [];
+        let inorder = [];
+        let postorder = [];
+    
+        if(!root){
+            return null;
+        }
+    
+        let stack = [];
+    
+        stack.push([root, 1]);
+    
+        while(stack.length > 0){
+            let [node, num] = stack.pop();
+    
+            if(num == 1){
+                preorder.push(node.data);
+                num = 2;
+                stack.push([node, num]);
+    
+                if(node.left != null){
+                    stack.push([node.left, 1]);
+                }
+            } else if (num == 2){
+                inorder.push(node.data);
+                num = 3;
+                stack.push([node, num]);
+    
+                if(node.right != null){
+                    stack.push([node.right, 1]);
+                }
+            } else {
+                postorder.push(node.data);
+            }
+        }
+    
+        return [preorder, inorder, postorder];
+    }
+
+    print(arr) {
+        for (let val of arr) {
+            console.log(val + " ");
+        }
+        console.log("\n");
+    }
 }
 
 let tree = new BinaryTree();
@@ -135,11 +182,20 @@ tree.remove(35);
 
 console.log("Root: ",tree.getRoot());
 
+let traversals = tree.preInPostTraversal(tree.getRoot());
+
+let pre = traversals[0];
+let inOrder = traversals[1];
+let post = traversals[2];
+
 console.log("Inorder traversal: ");
-tree.inorder(tree.getRoot());
+tree.print(inOrder);
+// tree.inorder(tree.getRoot());
 
 console.log("Preorder traversal: ");
-tree.preorder(tree.getRoot());
+tree.print(pre);
+// tree.preorder(tree.getRoot());
 
 console.log("Postorder traversal: ");
-tree.postorder(tree.getRoot());
+tree.print(post);
+// tree.postorder(tree.getRoot());
