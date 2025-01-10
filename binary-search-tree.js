@@ -118,6 +118,41 @@ class BinarySearchTree {
             console.log(root.data);
         }
     }
+
+    bfs(root){
+        if(!root){
+            return;
+        }
+
+        const result = [];
+        let queue = [];
+
+        queue.push(root);
+
+        while(queue.length > 0){
+            const levelSize = queue.length;
+            const currentLevel = [];
+
+            for(let i = 0; i < levelSize; i++){
+                const node = queue.shift();
+
+                console.log(node.data);
+                currentLevel.push(node.data);
+
+                if(node.left){
+                    queue.push(node.left);
+                }
+
+                if(node.right){
+                    queue.push(node.right);
+                }
+            }
+
+            result.push(currentLevel);
+        }
+
+        return result;
+    }
 }
 
 let tree = new BinarySearchTree();
@@ -142,3 +177,6 @@ tree.preorder(tree.getRoot());
 
 console.log("Postorder Traversal:");
 tree.postorder(tree.getRoot());
+
+console.log("BFS Traversal:");
+tree.bfs(tree.getRoot());
