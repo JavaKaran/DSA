@@ -81,6 +81,13 @@ class MaxHeap {
     getHeap(){
         return this.heap;
     }
+
+    convertToMaxHeap(arr){
+        this.heap = arr;
+        for(let i = parseInt(this.heap.length/2) - 1; i >=0; i--){
+            this.maxHeapify(this.heap, this.heap.length, i);
+        }
+    }
 }
 
 class MinHeap {
@@ -163,9 +170,16 @@ class MinHeap {
     getHeap(){
         return this.heap;
     }
+
+    convertToMinHeap(arr){
+        this.heap = arr;
+        for(let i = parseInt(this.heap.length/2) - 1; i >=0; --i){
+            this.minHeapify(this.heap, this.heap.length, i);
+        }
+    }
 }
 
-const heap = new MinHeap();
+const heap = new MaxHeap();
 heap.insert(3);
 heap.insert(4);
 heap.insert(9);
@@ -173,3 +187,9 @@ heap.insert(5);
 heap.insert(2);
 
 console.log("Heap", heap.getHeap());
+
+const maxHeap = new MaxHeap();
+
+console.log("Converted to Max Heap:");
+maxHeap.convertToMaxHeap([3, 5, 9, 6, 8, 20, 10, 12, 18, 9]);
+console.log(maxHeap.getHeap());
