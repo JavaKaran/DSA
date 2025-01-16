@@ -17,7 +17,7 @@ class Graph {
         // this.matrix[node2][node1] = 1;
 
         this.list[node1].push(node2);
-        this.list[node2].push(node1);
+        // this.list[node2].push(node1);
     }
 
     removeEdge(node1, node2){
@@ -25,7 +25,7 @@ class Graph {
         // this.matrix[node2][node1] = 0;
 
         this.list[node1] = this.list[node1].filter(n => n !== node2);
-        this.list[node2] = this.list[node2].filter(n => n !== node1);
+        // this.list[node2] = this.list[node2].filter(n => n !== node1);
     }
 
     isEdgeMatrix(node1, node2){
@@ -64,6 +64,33 @@ class Graph {
             })
         }
     }
+
+    topoSort(graph){
+        let visited = new Set();
+        let stack = [];
+
+        Object.keys(graph).forEach((vertex) => {
+            if(!visited.has(vertex)){
+                this.topoSortHelper(vertex, visited, stack, graph);
+            }
+        })
+
+        return stack.reverse();
+    }
+
+    topoSortHelper(node, visited, stack, graph){
+        visited.add(node);
+
+        const neighbors = graph[node];
+
+        neighbors.forEach((neighbor) => {
+            if(!visited.has(neighbor)){
+                this.topoSortHelper(neighbor, visited, stack, graph);
+            }
+        })
+
+        stack.push(node);
+    }
 }
 
 let g = new Graph();
@@ -72,16 +99,17 @@ g.addNode('B');
 g.addNode('C');
 g.addNode('D');
 g.addNode('E');
-g.addNode('F');
 
 g.addEdge('A', 'B');
 g.addEdge('A', 'C');
 g.addEdge('B', 'D');
-g.addEdge('B', 'E');
-g.addEdge('C', 'F');
-g.addEdge('E', 'F');
+g.addEdge('C', 'D');
+g.addEdge('D', 'E');
 
 console.log("DFS:");
 g.dfs('A');
 console.log("BFS:");
 g.bfs('A');
+
+const topoSort = g.topoSort(g.list);
+console.log("Topo Sort: ", topoSort);
